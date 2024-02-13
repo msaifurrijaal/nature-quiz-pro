@@ -3,7 +3,6 @@ import InputForm from "../../elements/input";
 import Button from "../../elements/button";
 import { useCookies } from "react-cookie";
 import { loginAuth } from "../../../services/auth/AuthService";
-import { useNavigate } from "react-router-dom";
 
 type ValidationErrors = {
   username?: string;
@@ -25,7 +24,6 @@ const LoginForm = () => {
   const [loginFailed, setLoginFailed] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const setCookie = useCookies(["token"])[1];
-  const navigate = useNavigate();
 
   const usernameRef = useRef<HTMLInputElement | null>(null);
 
@@ -78,7 +76,7 @@ const LoginForm = () => {
       if (result.success) {
         console.log(result.data.data.token);
         setCookie("token", result.data.data.token);
-        navigate("/");
+        window.location.href = "/";
       } else {
         setLoginFailed(result.data.response.data);
       }

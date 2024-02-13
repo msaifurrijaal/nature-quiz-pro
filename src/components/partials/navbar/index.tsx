@@ -1,31 +1,33 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faCartShopping,
-  faHistory,
-  faUser,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link, useLocation } from "react-router-dom";
 import { useIsUserLogin } from "../../../context/IsLogin";
+import LogoutDialog from "../../elements/popup/LogoutDialog";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const { isUserLogin } = useIsUserLogin();
-  const [cookies, , removeCookie] = useCookies(["token"]);
+  const [, , removeCookie] = useCookies(["token"]);
   const location = useLocation();
+
+  const handleLogout = () => {
+    removeCookie("token");
+    window.location.href = "/login";
+  };
+
   return (
     <>
       <div className="shadow-md w-full fixed top-0 left-0 z-50">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
           <div className="cursor-pointer">
-            <h1 className="text-xl font-semibold text-primary">
-              Nature Science Pro
-            </h1>
+            <Link to="/">
+              <h1 className="text-xl font-semibold text-primary">
+                Nature Science Pro
+              </h1>
+            </Link>
           </div>
 
           <div
@@ -43,29 +45,33 @@ const Navbar = () => {
               open ? "top-14 " : "top-[-490px]"
             }`}
           >
-            <li className="group">
-              <Link
-                to="/"
-                className={`font-medium text-base ${
-                  location.pathname === "/" ? "text-primary" : "text-dark"
-                } py-2 mx-4 flex group-hover:text-primary`}
-              >
-                Home
-              </Link>
-            </li>
-            <li className="group">
-              <Link
-                to=""
-                className={`font-medium text-base ${
-                  location.pathname === "/products"
-                    ? "text-primary"
-                    : "text-dark"
-                } py-2 mx-4 flex group-hover:text-primary`}
-              >
-                Leaderboard
-              </Link>
-            </li>
-            {isUserLogin && (
+            {location.pathname !== "/quiz" && (
+              <li className="group">
+                <Link
+                  to="/"
+                  className={`font-medium text-base ${
+                    location.pathname === "/" ? "text-primary" : "text-dark"
+                  } py-2 mx-4 flex group-hover:text-primary`}
+                >
+                  Home
+                </Link>
+              </li>
+            )}
+            {location.pathname !== "/quiz" && (
+              <li className="group">
+                <Link
+                  to=""
+                  className={`font-medium text-base ${
+                    location.pathname === "/products"
+                      ? "text-primary"
+                      : "text-dark"
+                  } py-2 mx-4 flex group-hover:text-primary`}
+                >
+                  Leaderboard
+                </Link>
+              </li>
+            )}
+            {isUserLogin && location.pathname !== "/quiz" && (
               <li className="group">
                 <Link
                   to=""
@@ -81,7 +87,7 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
-            {!isUserLogin && (
+            {!isUserLogin && location.pathname !== "/quiz" && (
               <li className="group">
                 <Link to="/login" className=" mx-4 md:mx-2 flex">
                   <div
@@ -96,6 +102,13 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
+      {modalOpen && (
+        <LogoutDialog
+          title="Are you sure to logout?"
+          nOnClick={setModalOpen}
+          yOnClick={handleLogout}
+        />
+      )}
     </>
   );
 };
