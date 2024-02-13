@@ -23,13 +23,12 @@ const Navbar = () => {
       <div className="shadow-md w-full fixed top-0 left-0 z-50">
         <div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
           <div className="cursor-pointer">
-            <Link to="/">
+            <Link to="/" replace>
               <h1 className="text-xl font-semibold text-primary">
                 Nature Science Pro
               </h1>
             </Link>
           </div>
-
           <div
             onClick={() => setOpen(!open)}
             className="absolute right-8 top-4 cursor-pointer md:hidden"

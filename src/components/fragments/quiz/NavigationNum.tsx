@@ -5,18 +5,30 @@ import Button from "../../elements/button";
 type NavigationNumProps = {
   questions: Question[];
   index: number;
+  timer: string;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const NavigationNum = ({ questions, index, setIndex }: NavigationNumProps) => {
+const NavigationNum = ({
+  questions,
+  index,
+  timer,
+  setIndex,
+}: NavigationNumProps) => {
   return (
     <div className="w-full md:w-1/3 py-4 md:pe-4">
       <div className="w-full rounded-lg border shadow-sm p-4">
         {questions && questions.length > 0 && (
           <div>
-            <p className="text-lg md:text-xl font-semibold">
-              Question {index + 1} / {questions.length}
-            </p>
+            <div className="flex justify-between items-center">
+              <p className="text-lg md:text-xl font-semibold">
+                Question {index + 1} / {questions.length}
+              </p>
+              <p className="text-lg md:text-xl font-semibold bg-slate-100 py-1 px-2 rounded-lg">
+                {timer}
+              </p>
+            </div>
+
             <div className="flex flex-wrap justify-start items-center mt-6">
               {questions.map((question: Question, indexNum) => (
                 <Link

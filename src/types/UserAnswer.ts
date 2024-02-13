@@ -1,9 +1,10 @@
 export interface UserAnswer {
   answer: Answer[];
-  isDone: boolean;
+  progress: string;
 }
 
 export interface Answer {
   questions: string;
   answer: string;
+  correctAnswer: string;
 }

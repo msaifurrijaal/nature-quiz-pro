@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { UserAnswer } from "../../types/UserAnswer";
+import { Answer, UserAnswer } from "../../types/UserAnswer";
 import { useEffect, useState } from "react";
 import Navbar from "../../components/partials/navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,6 +50,8 @@ const ResultPage = () => {
         }
       }
     }
+
+    console.log(userAnswer?.answer);
   }, [questions]);
   return (
     <>
@@ -58,8 +60,8 @@ const ResultPage = () => {
         <div className="py-4">
           <h1 className="text-2xl md:text-4xl font-semibold">Result</h1>
           {userAnswer && (
-            <div className="flex flex-wrap">
-              <div className="w-full md:w-6/12 me-2 min-h-full p-4 rounded-lg border shadow-sm mt-4">
+            <div className="flex flex-wrap justify-evenly">
+              <div className="w-full md:w-6/12 min-h-full p-4 rounded-lg border shadow-sm mt-4">
                 <p className="text-lg">
                   <FontAwesomeIcon icon={faCheck} />{" "}
                   <span className="font-semibold">
@@ -68,14 +70,14 @@ const ResultPage = () => {
                   {}
                 </p>
                 <p className="text-lg">
-                  <FontAwesomeIcon icon={faCircleCheck} />{" "}
+                  <FontAwesomeIcon icon={faCircleCheck} color="#0D9276" />{" "}
                   <span className="font-semibold">
                     Correct Answers : {correctAnswer}
                   </span>
                   {}
                 </p>
                 <p className="text-lg">
-                  <FontAwesomeIcon icon={faCircleXmark} />{" "}
+                  <FontAwesomeIcon icon={faCircleXmark} color="#DF2E38" />{" "}
                   <span className="font-semibold">
                     Wrong Answers : {wrongAnswer}
                   </span>
@@ -92,6 +94,39 @@ const ResultPage = () => {
               </div>
             </div>
           )}
+          <div className="mt-6">
+            {questions &&
+              userAnswer &&
+              userAnswer.answer.map((answer: Answer, index) => (
+                <div
+                  key={index}
+                  className="w-full p-4 rounded-lg border shadow-sm mb-2"
+                >
+                  <div className="flex flex-wrap">
+                    <p className="text-lg font-medium me-1">{index + 1}.</p>
+                    <div>
+                      <p className="text-lg font-medium">Question</p>
+                      <p>{answer.questions}</p>
+                      <p className="mt-2">
+                        <span className="text-base font-medium">Answer : </span>
+                        {answer.answer === "" ? "empty" : answer.answer}{" "}
+                        {answer.answer === answer.correctAnswer ? (
+                          <FontAwesomeIcon
+                            icon={faCircleCheck}
+                            color="#0D9276"
+                          />
+                        ) : (
+                          <FontAwesomeIcon
+                            icon={faCircleXmark}
+                            color="#DF2E38"
+                          />
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
       </div>
     </>

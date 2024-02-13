@@ -5,9 +5,15 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { quizData } from "../../../services/quiz/QuizService";
+import { UserAnswer } from "../../../types/UserAnswer";
 
 const HeroSection = () => {
   const questions = localStorage.getItem("questions");
+  const userAns = localStorage.getItem("userAnswer");
+  let userAnswer: UserAnswer = { answer: [], progress: "start" };
+  if (userAns) {
+    userAnswer = JSON.parse(userAns);
+  }
   const [isLoading, setIsLoading] = useState(false);
 
   const refreshQuestions = async () => {
@@ -16,6 +22,7 @@ const HeroSection = () => {
 
     if (result.success) {
       setIsLoading(false);
+      localStorage.removeItem("userAnswer");
       localStorage.setItem(
         "questions",
         JSON.stringify(result.data.data.results)
@@ -76,9 +83,10 @@ const HeroSection = () => {
             Start Quiz
           </Link>
         )}
-        {isUserLogin && (
+        {isUserLogin && userAnswer && userAnswer.progress === "process" && (
           <Link
             to="/quiz"
+            state="resume"
             className="font-medium text-base bg-white text-primary border border-primary rounded-md py-2 px-4 
           hover:bg-slate-100 hover:border-primaryDark hover:text-primaryDark transition duration-200 mt-6 ms-1"
           >

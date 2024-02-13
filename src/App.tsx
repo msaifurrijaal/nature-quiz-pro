@@ -22,6 +22,10 @@ const ResultPage = React.lazy(() =>
   wait(1000).then(() => import("./pages/result"))
 );
 
+const TimerPage = React.lazy(() =>
+  wait(1000).then(() => import("./pages/timer"))
+);
+
 const WithSuspend = ({ children }: { children: React.ReactNode }) => {
   return <Suspense fallback={<LoadingPage />}>{children}</Suspense>;
 };
@@ -61,6 +65,10 @@ function App() {
           <ResultPage />
         </UserPrivateRoute>
       ),
+    },
+    {
+      path: "/timer",
+      element: <TimerPage />,
     },
   ]);
   return (
