@@ -1,9 +1,8 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useIsUserLogin } from "../../context/IsLogin";
 
 const UserAuthRoute = ({ children }: { children: React.ReactNode }) => {
   const { isUserLogin } = useIsUserLogin();
-  const location = useLocation();
 
   return !isUserLogin ? children : <Navigate to="/" />;
 };
