@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import Button from "../../elements/button";
 import { Answer, UserAnswer } from "../../../types/UserAnswer";
 import Timer from "../../elements/timer";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 type NavigationNumProps = {
   userAnswer: UserAnswer;
@@ -20,8 +22,8 @@ const NavigationNum = ({
 }: NavigationNumProps) => {
   return (
     <div className="w-full md:w-1/3 py-4 md:pe-4">
-      <div className="w-full rounded-lg border shadow-sm p-4">
-        {userAnswer && userAnswer.answer.length > 0 && (
+      {userAnswer && userAnswer.answer.length > 0 ? (
+        <div className="w-full rounded-lg border shadow-sm p-4">
           <div>
             <div className="flex justify-between items-center">
               <p className="text-lg md:text-xl font-semibold">
@@ -69,8 +71,12 @@ const NavigationNum = ({
               </Button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="w-full rounded-lg">
+          <Skeleton height="220px" />
+        </div>
+      )}
     </div>
   );
 };

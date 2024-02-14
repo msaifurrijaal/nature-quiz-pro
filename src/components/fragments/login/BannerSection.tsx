@@ -7,6 +7,7 @@ const BannerSection = () => {
         src="/images/illustration_girl.png"
         alt="Illustration Girl"
         className="w-3/4"
+        loading="lazy"
       />
       <div className="text-center mt-4">
         <Link to="/">

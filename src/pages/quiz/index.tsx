@@ -31,13 +31,10 @@ const QuizPage = () => {
       const result = await quizData();
 
       if (result.success) {
-        console.log(result.data.data.results);
         setQuestions(result.data.data.results);
       } else {
-        console.log(result.data);
       }
     };
-
     if (questionsLocal && questionsLocal.length > 0) {
       setQuestions(JSON.parse(questionsLocal));
     } else {
@@ -126,15 +123,17 @@ const QuizPage = () => {
           isChoice={isChoice}
           choiceAnswer={choiceAnswer}
         />
-        <div className="w-full flex justify-end">
-          <Button
-            onClick={handleSubmit}
-            classname="font-medium text-base bg-primary text-white rounded-md py-2 px-4 
+        {userAnswer && userAnswer.answer.length > 0 && (
+          <div className="w-full flex justify-end">
+            <Button
+              onClick={handleSubmit}
+              classname="font-medium text-base bg-primary text-white rounded-md py-2 px-4 
                   hover:bg-primaryDark transition duration-200"
-          >
-            Submit
-          </Button>
-        </div>
+            >
+              Submit
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

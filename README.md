@@ -43,5 +43,5 @@ Beberapa fitur yang tersedia dalam aplikasi Nature Quiz pro adalah:
 ## URL Website 🔗
 
 ~~~bash  
-  https://buah-kita.vercel.app/
+  https://nature-quiz-pro.vercel.app/
 ~~~

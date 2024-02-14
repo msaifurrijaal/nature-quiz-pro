@@ -1,4 +1,6 @@
 import { Question } from "../../../types/QuestionType";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 type QuestionSectionProps = {
   questions: Question[];
@@ -15,8 +17,8 @@ const QuestionSection = ({
 }: QuestionSectionProps) => {
   return (
     <div className="w-full md:w-2/3 py-4">
-      <div className="w-full rounded-lg border shadow-sm p-4">
-        {questions && questions.length > 0 && (
+      {questions && questions.length > 0 ? (
+        <div className="w-full rounded-lg border shadow-sm p-4">
           <div>
             <h3 className="text-lg md:text-xl font-semibold">
               Question {index + 1}
@@ -80,8 +82,12 @@ const QuestionSection = ({
               consectetur harum non voluptatum atque molestiae tenetur cumque.
             </p>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="w-full rounded-lg">
+          <Skeleton height="300px" />
+        </div>
+      )}
     </div>
   );
 };

@@ -40,6 +40,7 @@ const HeroSection = () => {
         src="/images/hero.png"
         alt="Hero Images"
         className="max-w-80 sm:max-w-96"
+        loading="lazy"
       />
       <h2 className="text-2xl text-center sm:text-4xl md:text-5xl font-bold mt-2 md:mt-4 flex text-primary justify-center">
         <Typewriter
