@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../components/partials/navbar";
 import { quizData } from "../../services/quiz/QuizService";
 import { Question } from "../../types/QuestionType";
@@ -7,7 +7,6 @@ import QuestionSection from "../../components/fragments/quiz/QuestionSection";
 import { Answer, UserAnswer } from "../../types/UserAnswer";
 import Button from "../../components/elements/button";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Time } from "../../types/Time";
 
 const QuizPage = () => {
   const location = useLocation();
@@ -26,8 +25,6 @@ const QuizPage = () => {
   const [userAnswer, setUserAnswer] = useState<UserAnswer>(userAnswerResume);
   const questionsLocal = localStorage.getItem("questions");
   const navigate = useNavigate();
-  const [timer, setTimer] = useState<string>("00:00:00");
-  const Ref = useRef<number | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,22 +43,14 @@ const QuizPage = () => {
     } else {
       fetchData();
     }
-
-    clearTimer(getDeadTime());
-
-    return () => {
-      if (Ref.current) clearInterval(Ref.current);
-    };
   }, []);
 
   useEffect(() => {
     localStorage.setItem("questions", JSON.stringify(questions));
 
     if (status === "resume") {
-      console.log("resume");
       setUserAnswer(userAnswerResume);
     } else {
-      console.log("restart");
       setIsChoice("");
       const answer: Answer[] = [];
       const userAnswer: UserAnswer = { answer: [], progress: "start" };
@@ -99,7 +88,6 @@ const QuizPage = () => {
 
   const choiceAnswer = (ans: string) => {
     setIsChoice(ans);
-    console.log(userAnswer);
     setUserAnswer((prevUserAnswer) => {
       const updatedAnswer = [...prevUserAnswer.answer];
       updatedAnswer[index].answer = ans;
@@ -121,68 +109,16 @@ const QuizPage = () => {
     });
   };
 
-  const getTimeRemaining = (endTime: Date): Time => {
-    const total =
-      Date.parse(endTime.toISOString()) - Date.parse(new Date().toISOString());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-    return { total, hours, minutes, seconds };
-  };
-
-  const startTimer = (endTime: Date) => {
-    let { total, hours, minutes, seconds } = getTimeRemaining(endTime);
-    if (total >= 0) {
-      const formattedTimer =
-        (hours > 9 ? hours : "0" + hours) +
-        ":" +
-        (minutes > 9 ? minutes : "0" + minutes) +
-        ":" +
-        (seconds > 9 ? seconds : "0" + seconds);
-
-      localStorage.setItem("remainingSeconds", total.toString());
-
-      setTimer(formattedTimer);
-    } else {
-      setUserAnswer((prevUserAnswer) => {
-        return {
-          ...prevUserAnswer,
-          progress: "done",
-        };
-      });
-    }
-  };
-
-  const clearTimer = (endTime: Date) => {
-    setTimer("00:00:00");
-    if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => {
-      startTimer(endTime);
-    }, 1000);
-    Ref.current = id;
-  };
-
-  const getDeadTime = (): Date => {
-    const deadline = new Date();
-    if (status === "resume") {
-      const miliSeconds = Number(localStorage.getItem("remainingSeconds"));
-      const seconds = Math.floor(miliSeconds / 1000);
-      deadline.setSeconds(deadline.getSeconds() + seconds);
-    } else {
-      deadline.setSeconds(deadline.getSeconds() + 600);
-    }
-    return deadline;
-  };
-
   return (
     <div>
       <Navbar />
       <div className="container py-16 md:py-20 px-4 flex flex-wrap">
         <NavigationNum
-          questions={questions}
+          userAnswer={userAnswer}
           index={index}
-          timer={timer}
+          status={status}
           setIndex={setIndex}
+          setUserAnswer={setUserAnswer}
         />
         <QuestionSection
           questions={questions}

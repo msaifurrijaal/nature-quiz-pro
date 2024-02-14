@@ -1,44 +1,47 @@
 import { Link } from "react-router-dom";
-import { Question } from "../../../types/QuestionType";
 import Button from "../../elements/button";
+import { Answer, UserAnswer } from "../../../types/UserAnswer";
+import Timer from "../../elements/timer";
 
 type NavigationNumProps = {
-  questions: Question[];
+  userAnswer: UserAnswer;
   index: number;
-  timer: string;
+  status: string | undefined;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
+  setUserAnswer: React.Dispatch<React.SetStateAction<UserAnswer>>;
 };
 
 const NavigationNum = ({
-  questions,
+  userAnswer,
   index,
-  timer,
+  status,
   setIndex,
+  setUserAnswer,
 }: NavigationNumProps) => {
   return (
     <div className="w-full md:w-1/3 py-4 md:pe-4">
       <div className="w-full rounded-lg border shadow-sm p-4">
-        {questions && questions.length > 0 && (
+        {userAnswer && userAnswer.answer.length > 0 && (
           <div>
             <div className="flex justify-between items-center">
               <p className="text-lg md:text-xl font-semibold">
-                Question {index + 1} / {questions.length}
+                Question {index + 1} / {userAnswer.answer.length}
               </p>
-              <p className="text-lg md:text-xl font-semibold bg-slate-100 py-1 px-2 rounded-lg">
-                {timer}
-              </p>
+              <Timer status={status} setUserAnswer={setUserAnswer} />
             </div>
 
             <div className="flex flex-wrap justify-start items-center mt-6">
-              {questions.map((question: Question, indexNum) => (
+              {userAnswer.answer.map((answer: Answer, indexNum) => (
                 <Link
                   to=""
                   onClick={() => setIndex(indexNum)}
-                  key={question.question}
+                  key={indexNum}
                   className={`py-2 px-4 ${
-                    indexNum === index
-                      ? "bg-yellow-500 border border-yellow-500"
-                      : "border border-yellow-500"
+                    indexNum !== index
+                      ? answer.answer === ""
+                        ? "border border-yellow-500"
+                        : "bg-slate-500 border border-slate-500 text-white"
+                      : "bg-yellow-500 border border-yellow-500"
                   } mx-1 mb-2 rounded-lg`}
                 >
                   <p>{indexNum + 1}</p>
@@ -57,7 +60,7 @@ const NavigationNum = ({
               <Button
                 onClick={() =>
                   setIndex((prev) =>
-                    prev !== questions.length - 1 ? prev + 1 : prev
+                    prev !== userAnswer.answer.length - 1 ? prev + 1 : prev
                   )
                 }
                 classname="bg-yellow-500 text-white hover:bg-yellow-700 ms-1"
